@@ -1,0 +1,29 @@
+version: '3'
+services: 
+  
+  mongo:
+    container_name: mongo
+    image: mongo
+    environment:
+      - MONGO_INITDB_DATABASE=pit
+    volumes:
+      - ./mongo/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+    ports:
+      - '27018:27017'
+
+  maildev:
+    container_name: maildev
+    image: djfarrelly/maildev
+    ports:
+      - '1080:80'
+      - '1025:25'
+
+  apache:
+    image: bitnami/apache:latest
+    ports:
+      - '8081:8080'
+      - '443:8443'
+    volumes:
+      - ./apache/conf/vhosts/aem_vhost.conf:/bitnami/apache/conf/vhosts/aem_vhost.conf
+      - ./apache/logs:/bitnami/apache/logs
+      
