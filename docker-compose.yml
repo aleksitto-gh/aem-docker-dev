@@ -1,6 +1,6 @@
 version: '3'
-services: 
-  
+services:
+
   mongo:
     container_name: mongo
     image: mongo
@@ -18,12 +18,28 @@ services:
       - '1080:80'
       - '1025:25'
 
-  apache:
-    image: bitnami/apache:latest
-    ports:
-      - '8081:8080'
-      - '443:8443'
+  author:
+    container_name: author
+    image: local/aem-dispatcher-author
     volumes:
-      - ./apache/conf/vhosts/aem_vhost.conf:/bitnami/apache/conf/vhosts/aem_vhost.conf
-      - ./apache/logs:/bitnami/apache/logs
-      
+      - ./aem-dispatcher/author/logs:/etc/httpd/logs
+      - ./aem-dispatcher/author/dispatcher_cache:/etc/httpd/dispatcher_cache
+    environment:
+      - AEM_HOST=${MY_HOST}
+      - AEM_PORT=${AUTHOR_PORT}
+    ports:
+      - '1083:80'
+      - '1443:443'
+
+  publisher:
+    container_name: publisher
+    image: local/aem-dispatcher-publisher
+    volumes:
+      - ./aem-dispatcher/publisher/logs:/etc/httpd/logs
+      - ./aem-dispatcher/publisher/dispatcher_cache:/etc/httpd/dispatcher_cache
+    environment:
+      - AEM_HOST=${MY_HOST}
+      - AEM_PORT=${PUBLISHER_PORT}
+    ports:
+      - '1084:80'
+      - '2443:443'
