@@ -13,7 +13,7 @@ RUN cp ./dispatcher/dispatcher-apache2.*.so /etc/httpd/modules/
 RUN ln -s /etc/httpd/modules/dispatcher-apache2.*.so /etc/httpd/modules/mod_dispatcher.so
 
 # Copy all config files to the image
-COPY conf/httpd /etc/httpd
+# COPY conf/httpd /etc/httpd
 
 CMD ["-D", "FOREGROUND"]
 ENTRYPOINT ["/usr/sbin/httpd"]
